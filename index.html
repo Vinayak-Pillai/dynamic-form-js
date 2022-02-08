@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Add Form Controls</title>
+    <link rel="stylesheet" href="index.css" />
+  </head>
+  <body>
+    <main class="container">
+      <h1>Dynamic Form Controls</h1>
+      <div class="main_container1">
+        <div class="l_left_container">
+          <div class="left_container" id="l_container">
+            <select name="Form_controls" id="add_control">
+              <option value="text">Text</option>
+              <option value="number">Number</option>
+              <option value="email">Email</option>
+              <option value="radio">Radio</option>
+              <option value="select">Select</option>
+              <option value="checkbox">Checkbox</option>
+              <option value="submit">Submit</option>
+            </select>
+            <button id="addctrl_btn">ADD</button>
+          </div>
+        </div>
+        <div class="right_container" id="r_container"></div>
+      </div>
+      <div class="main_container2">
+        <div id="ml_container"></div>
+        <div id="mr_container"></div>
+      </div>
+    </main>
+
+    <script type="text/javascript">
+      //initializations
+      const l_container = document.getElementById("l_container");
+      const r_container = document.getElementById("r_container");
+      const add_control = document.getElementById("add_control");
+      const addctrl_btn = document.getElementById("addctrl_btn");
+      const main_container2 = document.querySelectorAll(".main_container2");
+      const ml_container = document.querySelector("#ml_container");
+      const mr_container = document.querySelector("#mr_container");
+      let nd_arr = [];
+      let temp_arr = [];
+
+      //on click checks the user selection and creates a class of elements based on the selected value
+      addctrl_btn.addEventListener("click", () => {
+        //if selection is radio then it creates a div class and another nested div class for holding the values of radio buttons.
+
+        if (add_control.value == "radio") {
+          const node = document.createElement("div");
+          node.setAttribute("class", "formctrl_container");
+          let inputElement = document.createElement("input");
+          node.appendChild(inputElement);
+          const inputElem_btn = document.createElement("button");
+          inputElem_btn.setAttribute("class", "addLabel");
+          const btnText = document.createTextNode("ADD");
+          inputElem_btn.appendChild(btnText);
+          node.appendChild(inputElem_btn);
+          const radioDiv = document.createElement("div");
+          radioDiv.setAttribute("class", "radioDiv");
+          node.appendChild(radioDiv);
+          const radioOptions = document.createElement("input");
+          // radioOptions.setAttribute('type',"text");
+          radioDiv.appendChild(radioOptions);
+          const radioAdd = document.createElement("button");
+          radioAdd.setAttribute("class", "radioAdd_btn");
+          const radioAdd_text = document.createTextNode("ADD");
+          radioAdd.appendChild(radioAdd_text);
+          radioDiv.appendChild(radioAdd);
+          const closeElem_btn = document.createElement("button");
+          const closebtnText = document.createTextNode("\u00D7");
+          closeElem_btn.setAttribute("class", "closeBtn");
+          closeElem_btn.appendChild(closebtnText);
+          node.appendChild(closeElem_btn);
+          r_container.appendChild(node);
+
+          //onclick changes the input text to label for the corresponding entry
+          const addLabel = document.querySelectorAll(".addLabel");
+          addLabel.forEach((items) => {
+            items.addEventListener("click", () => {
+              const labelValue = inputElement.value;
+              const labelElement = document.createElement("label");
+              const labelText = document.createTextNode(labelValue);
+              labelElement.appendChild(labelText);
+              node.replaceChild(labelElement, inputElement);
+              items.style.display = "none";
+              // node.removeChild(inputElem_btn);
+            });
+          });
+
+          //creates radio butttons in the neted class.
+          const radioAdd_btn = document.querySelectorAll(".radioAdd_btn");
+          radioAdd_btn.forEach((radioBtn) => {
+            radioBtn.addEventListener("click", () => {
+              const labelValue = inputElement.value;
+              const radioValue = radioOptions.value;
+              const radioInput = document.createElement("input");
+              radioInput.setAttribute("type", "radio");
+              radioInput.setAttribute("name", labelValue);
+              radioInput.setAttribute("value", radioValue);
+              const radioSpan = document.createElement("span");
+              radioSpan.setAttribute("class", "radiospanClass");
+              const radioText = document.createTextNode(radioValue);
+              radioDiv.appendChild(document.createElement("br"));
+              radioDiv.appendChild(radioInput);
+              radioSpan.appendChild(radioText);
+              radioDiv.appendChild(radioSpan);
+              radioOptions.value = "";
+            });
+          });
+
+          //closes the current entry
+          const closeBtn = document.querySelectorAll(".closeBtn");
+          closeBtn.forEach((clsBtn) => {
+            clsBtn.addEventListener("click", () => {
+              const removeBtn = clsBtn.parentNode;
+              removeBtn.parentNode.removeChild(removeBtn);
+            });
+          });
+        }
+        //similarly for checkbox
+        else if (add_control.value == "checkbox") {
+          const node = document.createElement("div");
+          node.setAttribute("class", "formctrl_container");
+          let inputElement = document.createElement("input");
+          node.appendChild(inputElement);
+          const inputElem_btn = document.createElement("button");
+          inputElem_btn.setAttribute("class", "addLabel");
+          const btnText = document.createTextNode("ADD");
+          inputElem_btn.appendChild(btnText);
+          node.appendChild(inputElem_btn);
+          const checkboxDiv = document.createElement("div");
+          checkboxDiv.setAttribute("class", "checkboxDiv");
+          node.appendChild(checkboxDiv);
+          const checkboxOptions = document.createElement("input");
+          checkboxOptions.setAttribute("type", "text");
+          checkboxDiv.appendChild(checkboxOptions);
+          const checkboxAdd = document.createElement("button");
+          checkboxAdd.setAttribute("class", "checkboxAdd_btn");
+          const checkboxAdd_text = document.createTextNode("ADD");
+          checkboxAdd.appendChild(checkboxAdd_text);
+          checkboxDiv.appendChild(checkboxAdd);
+          const closeElem_btn = document.createElement("button");
+          const closebtnText = document.createTextNode("\u00D7");
+          closeElem_btn.setAttribute("class", "closeBtn");
+          closeElem_btn.appendChild(closebtnText);
+          node.appendChild(closeElem_btn);
+          r_container.appendChild(node);
+
+          //adds checkbox values into nested div
+          const checkboxAdd_btn = document.querySelectorAll(".checkboxAdd_btn");
+          checkboxAdd_btn.forEach((checkboxBtn) => {
+            checkboxBtn.addEventListener("click", () => {
+              const labelValue = inputElement.value;
+              const checkboxValue = checkboxOptions.value;
+              const checkboxInput = document.createElement("input");
+              checkboxInput.setAttribute("type", "checkbox");
+              checkboxInput.setAttribute("name", labelValue);
+              checkboxInput.setAttribute("value", checkboxValue);
+              const checkboxSpan = document.createElement("span");
+              checkboxSpan.setAttribute("class", "checkboxspanClass");
+              const checkboxText = document.createTextNode(checkboxValue);
+              checkboxDiv.appendChild(document.createElement("br"));
+              checkboxDiv.appendChild(checkboxInput);
+              checkboxSpan.appendChild(checkboxText);
+              checkboxDiv.appendChild(checkboxSpan);
+              checkboxOptions.value = "";
+            });
+          });
+
+          //changes the input text to label
+          const addLabel = document.querySelectorAll(".addLabel");
+          addLabel.forEach((items) => {
+            items.addEventListener("click", () => {
+              const labelValue = inputElement.value;
+              const labelElement = document.createElement("label");
+              const labelText = document.createTextNode(labelValue);
+              labelElement.appendChild(labelText);
+              node.replaceChild(labelElement, inputElement);
+              items.style.display = "none";
+              node.removeChild(inputElem_btn);
+            });
+          });
+
+          //closes the current entry
+          const closeBtn = document.querySelectorAll(".closeBtn");
+          closeBtn.forEach((clsBtn) => {
+            clsBtn.addEventListener("click", () => {
+              const removeBtn = clsBtn.parentNode;
+              removeBtn.parentNode.removeChild(removeBtn);
+            });
+          });
+        }
+
+        //similarly for select and options
+        else if (add_control.value == "select") {
+          const node = document.createElement("div");
+          node.setAttribute("class", "formctrl_container");
+          let inputElement = document.createElement("input");
+          node.appendChild(inputElement);
+          const inputElem_btn = document.createElement("button");
+          inputElem_btn.setAttribute("class", "addLabel");
+          const btnText = document.createTextNode("ADD");
+          inputElem_btn.appendChild(btnText);
+          node.appendChild(inputElem_btn);
+          const selectDiv = document.createElement("div");
+          selectDiv.setAttribute("class", "selectDiv");
+          const selectOptions = document.createElement("input");
+          selectOptions.setAttribute("type", "text");
+          selectDiv.appendChild(selectOptions);
+          const selectAdd = document.createElement("button");
+          selectAdd.setAttribute("class", "selectAdd_btn");
+          const selectAdd_text = document.createTextNode("ADD");
+          selectAdd.appendChild(selectAdd_text);
+          selectDiv.appendChild(selectAdd);
+          const selectInput = document.createElement("select");
+          selectInput.setAttribute("class", "optionValues");
+          selectDiv.appendChild(document.createElement("br"));
+          selectDiv.appendChild(selectInput);
+          node.appendChild(selectDiv);
+          const closeElem_btn = document.createElement("button");
+          const closebtnText = document.createTextNode("\u00D7");
+          closeElem_btn.setAttribute("class", "closeBtn");
+          closeElem_btn.appendChild(closebtnText);
+          node.appendChild(closeElem_btn);
+          r_container.appendChild(node);
+
+          //appends the option value to select
+          const selectAdd_btn = document.querySelectorAll(".selectAdd_btn");
+          selectAdd_btn.forEach((selectBtn) => {
+            selectBtn.addEventListener("click", () => {
+              const labelValue = inputElement.value;
+              const selectValue = selectOptions.value;
+              const optionsInput = document.createElement("option");
+              optionsInput.setAttribute("value", selectValue);
+              const optionsText = document.createTextNode(selectValue);
+              optionsInput.appendChild(optionsText);
+              selectInput.appendChild(optionsInput);
+              // selectDiv.appendChild(selectInput);
+              selectOptions.value = "";
+            });
+          });
+
+          //changes the text in input to label
+          const addLabel = document.querySelectorAll(".addLabel");
+          addLabel.forEach((items) => {
+            items.addEventListener("click", () => {
+              const labelValue = inputElement.value;
+              const labelElement = document.createElement("label");
+              const labelText = document.createTextNode(labelValue);
+              labelElement.appendChild(labelText);
+              node.replaceChild(labelElement, inputElement);
+              items.style.display = "none";
+              node.removeChild(inputElem_btn);
+            });
+          });
+
+          // closes the current entry
+          const closeBtn = document.querySelectorAll(".closeBtn");
+          closeBtn.forEach((clsBtn) => {
+            clsBtn.addEventListener("click", () => {
+              const removeBtn = clsBtn.parentNode;
+              removeBtn.parentNode.removeChild(removeBtn);
+            });
+          });
+        }
+
+        //if selected value is submit the creates a submit button with specified id
+        else if (add_control.value == "submit") {
+          // const node=document.createElement("div");
+          // node.setAttribute('class',"formctrl_container");
+          const inputElem = document.createElement("button");
+          const inputElemText = document.createTextNode("Submit");
+          inputElem.appendChild(inputElemText);
+          inputElem.setAttribute("type", "submit");
+          inputElem.setAttribute("id", "submitBtn");
+          // node.appendChild(inputElem);
+          r_container.appendChild(inputElem);
+        }
+
+        //for values other than radio,checkbox,select and submit the below code will be executed.
+        else {
+          const node = document.createElement("div");
+          node.setAttribute("class", "formctrl_container");
+          let inputElement = document.createElement("input");
+          node.appendChild(inputElement);
+          const inputElem_btn = document.createElement("button");
+          inputElem_btn.setAttribute("class", "addLabel");
+          const btnText = document.createTextNode("ADD");
+          inputElem_btn.appendChild(btnText);
+          node.appendChild(inputElem_btn);
+          r_container.appendChild(node);
+          const inputType = add_control.value;
+          const add_InputControl = document.createElement("input");
+          add_InputControl.setAttribute("type", inputType);
+          add_InputControl.setAttribute("placeholder", inputType);
+          node.appendChild(add_InputControl);
+          const closeElem_btn = document.createElement("button");
+          const closebtnText = document.createTextNode("\u00D7");
+          closeElem_btn.appendChild(closebtnText);
+          closeElem_btn.setAttribute("class", "closeBtn");
+          node.appendChild(closeElem_btn);
+          const addLabel = document.querySelectorAll(".addLabel");
+          addLabel.forEach((items) => {
+            items.addEventListener("click", () => {
+              const labelValue = inputElement.value;
+              const labelElement = document.createElement("label");
+              const labelText = document.createTextNode(labelValue);
+              labelElement.appendChild(labelText);
+              node.replaceChild(labelElement, inputElement);
+              node.removeChild(inputElem_btn);
+            });
+          });
+          const closeBtn = document.querySelectorAll(".closeBtn");
+          closeBtn.forEach((clsBtn) => {
+            clsBtn.addEventListener("click", () => {
+              const removeBtn = clsBtn.parentNode;
+              removeBtn.parentNode.removeChild(removeBtn);
+            });
+          });
+        }
+
+        //on click of submit the values in the cuurent container are created in another container
+        const submitBtn = document.querySelector("#submitBtn");
+        submitBtn.addEventListener("click", () => {
+          const formctrl_container = document.querySelectorAll(
+            ".formctrl_container"
+          );
+          const radioDivsub = document.querySelectorAll(
+            ".formctrl_container .radioDiv"
+          );
+          const checkboxDivsub = document.querySelectorAll(
+            ".formctrl_container .checkboxDiv"
+          );
+          const selectDivsub = document.querySelectorAll(
+            ".formctrl_container .selectDiv"
+          );
+          const formctrl_scontainer = document.querySelectorAll(
+            ".formctrl_scontainer"
+          );
+
+          //iterates through each div class in the previous container
+          formctrl_container.forEach((fctrl_container) => {
+            let nodeItem = fctrl_container.childNodes;
+            console.log(nodeItem);
+
+            let classElem = document.createElement("div");
+            classElem.setAttribute("class", "submittedClass");
+            ml_container.appendChild(classElem);
+
+            //checks if the second element of child node is nested div of radio
+            if (nodeItem[2].getAttribute("class") == "radioDiv") {
+              //iterates through the nested div and creates another div nested inside another(same as above radio).
+              radioDivsub.forEach((radioDivs) => {
+                // use the same method which was used while creating radioDiv and extract the values.
+                if (!nd_arr.includes(fctrl_container.firstChild.innerHTML)) {
+                  nd_arr.push(fctrl_container.firstChild.innerHTML);
+                  console.log(nd_arr);
+                  const createLabel = document.createElement("label");
+                  createLabel.appendChild(
+                    document.createTextNode(
+                      fctrl_container.firstChild.innerHTML
+                    )
+                  );
+                  classElem.appendChild(createLabel);
+                  const radiospanClass = document.querySelectorAll(
+                    ".radioDiv .radiospanClass"
+                  );
+                  const inputs = document.querySelectorAll("input");
+                  const rdivElem = document.createElement("div");
+                  rdivElem.setAttribute("class", "radiodivElem");
+                  classElem.appendChild(rdivElem);
+
+                  radiospanClass.forEach((radiospans) => {
+                    const rspanElem = document.createElement("input");
+                    console.log(radiospans);
+                    // const test=radiospans.getAttribute('name')
+                    rspanElem.setAttribute("type", "radio");
+                    rspanElem.setAttribute(
+                      "name",
+                      fctrl_container.firstChild.innerHTML
+                    );
+                    rspanElem.setAttribute("value", radiospans.innerHTML);
+                    const r_rspanElem = document.createElement("span");
+                    r_rspanElem.appendChild(
+                      document.createTextNode(radiospans.innerHTML)
+                    );
+                    // rspanElem.appendChild(r_rspanElem);
+                    rdivElem.appendChild(rspanElem);
+                    rdivElem.appendChild(r_rspanElem);
+                  });
+                }
+              });
+            }
+
+            //checks if 1st element of child node is div of checkbox
+            else if (nodeItem[1].getAttribute("class") == "checkboxDiv") {
+              checkboxDivsub.forEach((checkboxDivs) => {
+                if (!nd_arr.includes(fctrl_container.firstChild.innerHTML)) {
+                  nd_arr.push(fctrl_container.firstChild.innerHTML);
+                  const createLabel = document.createElement("label");
+                  createLabel.appendChild(
+                    document.createTextNode(
+                      fctrl_container.firstChild.innerHTML
+                    )
+                  );
+                  console.log(nd_arr);
+                  classElem.appendChild(createLabel);
+                  const checkboxspanClass = document.querySelectorAll(
+                    ".checkboxDiv .checkboxspanClass"
+                  );
+                  const cdivElem = document.createElement("div");
+                  cdivElem.setAttribute("class", "checkboxdivElem");
+                  classElem.appendChild(cdivElem);
+                  checkboxspanClass.forEach((checkboxspans) => {
+                    const cspanElem = document.createElement("input");
+                    cspanElem.setAttribute("type", "checkbox");
+                    cspanElem.setAttribute(
+                      "name",
+                      fctrl_container.firstChild.innerHTML
+                    );
+                    cspanElem.setAttribute("value", checkboxspans.innerHTML);
+                    const c_cspanElem = document.createElement("span");
+                    c_cspanElem.appendChild(
+                      document.createTextNode(checkboxspans.innerHTML)
+                    );
+                    // console.log(checkboxspans.innerHTML + "kasdjnsad");
+                    // console.log(inputs[i].getAttribute("value"));
+                    // rspanElem.appendChild(r_rspanElem);
+                    cdivElem.appendChild(cspanElem);
+                    cdivElem.appendChild(c_cspanElem);
+                  });
+                }
+              });
+            }
+            // checks if 1st element ofchild node is select.
+            else if (nodeItem[1].getAttribute("class") == "selectDiv") {
+              selectDivsub.forEach((selectDivs) => {
+                if (!nd_arr.includes(fctrl_container.firstChild.innerHTML)) {
+                  nd_arr.push(fctrl_container.firstChild.innerHTML);
+                  const createLabel = document.createElement("label");
+                  createLabel.appendChild(
+                    document.createTextNode(
+                      fctrl_container.firstChild.innerHTML
+                    )
+                  );
+                  classElem.appendChild(createLabel);
+                  const optionValues = document.querySelectorAll(
+                    ".selectDiv .optionValues option"
+                  );
+                  const sdivElem = document.createElement("div");
+                  const selectElement = document.createElement("select");
+                  sdivElem.appendChild(selectElement);
+                  sdivElem.setAttribute("class", "selectdivElem");
+                  classElem.appendChild(sdivElem);
+                  selectElement.setAttribute("name", createLabel.innerHTML);
+                  const selectChild = selectDivs.childNodes;
+                  optionValues.forEach((optionValue) => {
+                    const optElem = document.createElement("option");
+                    optElem.setAttribute("value", optionValue.value);
+                    optElem.appendChild(
+                      document.createTextNode(optionValue.value)
+                    );
+                    selectElement.appendChild(optElem);
+                  });
+                }
+              });
+            }
+            // other than the above values it iterates through each child nodes except last one as it is close button and creates copy of those elements
+            else {
+              for (let i = 0; i < nodeItem.length - 1; i++) {
+                let nodeElement = document.createElement(nodeItem[i].nodeName);
+                let node_text = document.createTextNode(nodeItem[i].innerHTML);
+                nodeElement.appendChild(node_text);
+                classElem.appendChild(nodeElement);
+              }
+            }
+          });
+
+          // creates a submit button to submit the values
+          let submitButtonElement = document.createElement("button");
+          submitButtonElement.setAttribute("id", "finalSubmit");
+          submitButtonElement.setAttribute("type", "submit");
+          submitButtonElement.appendChild(document.createTextNode("Submit"));
+          ml_container.appendChild(submitButtonElement);
+
+          const finalSubmit = document.querySelector("#finalSubmit");
+          finalSubmit.addEventListener("click", () => {
+            const submittedClass = document.querySelectorAll(".submittedClass");
+
+            //iterates through each class and gets the input value along with label
+            submittedClass.forEach((sClasses) => {
+              let divElem = document.createElement("div");
+              mr_container.appendChild(divElem);
+              let labelElem = document.createElement("label");
+              let inpElem = document.createElement("span");
+              divElem.appendChild(labelElem);
+              divElem.appendChild(inpElem);
+              const childClasses = sClasses.childNodes;
+              childClasses.forEach((child_class) => {
+                console.log(child_class.nodeName);
+
+                // if child node is label then creates a label tag and appends the innerHTML of previous label
+                if (child_class.nodeName == "LABEL") {
+                  labelElem.appendChild(
+                    document.createTextNode(child_class.innerHTML + ":")
+                  );
+                }
+
+                //checks if child node is div .i.e nested div for radio,checkbox and select
+                else if (
+                  child_class.nodeName == "DIV" &&
+                  child_class.getAttribute("class") == "radiodivElem"
+                ) {
+                  const RadioDiv = document.querySelectorAll(
+                    ".radiodivElem input"
+                  );
+                  // console.log(CheckboxDiv)
+                  console.log(RadioDiv);
+                  RadioDiv.forEach((RadioDivs) => {
+                    if (RadioDivs.checked) {
+                      console.log(RadioDivs.checked);
+                      inpElem.appendChild(
+                        document.createTextNode(RadioDivs.value)
+                      );
+                    }
+                  });
+                }
+
+                //for checkbox
+                else if (
+                  child_class.nodeName == "DIV" &&
+                  child_class.getAttribute("class") == "checkboxdivElem"
+                ) {
+                  const CheckboxDiv = document.querySelectorAll(
+                    ".checkboxdivElem input"
+                  );
+                  CheckboxDiv.forEach((divs) => {
+                    console.log(divs);
+                    if (divs.checked) {
+                      console.log("true");
+                      inpElem.appendChild(
+                        document.createTextNode(divs.value + " ")
+                      );
+                    }
+                  });
+                }
+
+                //for select
+                else if (
+                  child_class.nodeName == "DIV" &&
+                  child_class.getAttribute("class") == "selectdivElem"
+                ) {
+                  const selectDiv = document.querySelectorAll(
+                    ".selectdivElem select"
+                  );
+                  selectDiv.forEach((selectDivs) => {
+                    console.log(selectDivs);
+                    inpElem.appendChild(
+                      document.createTextNode(selectDivs.value)
+                    );
+                  });
+                }
+                //if child node is input the gets the value of input.
+                else if (child_class.nodeName == "INPUT") {
+                  inpElem.appendChild(
+                    document.createTextNode(child_class.value)
+                  );
+                }
+              });
+            });
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
